@@ -14,7 +14,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'frontend/')));
 
 var config = require('./config');
 config.redisConfig.client = redis.createClient();
@@ -28,6 +28,9 @@ app.use(session({
     }
 }));
 
+app.use("/", express.static(`${__dirname}/frontend/dist/frontend`));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 app.use('/', indexRouter);
 
 
@@ -46,5 +49,6 @@ con.connect(function (err) {
     console.log("DB Connected!");
 });
 
+global.__frontend = `${__dirname}/frontend/dist/frontend/index.html`;
 
 module.exports = app;

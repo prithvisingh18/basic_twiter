@@ -2,7 +2,7 @@ module.exports = {
     databaseConfig: {
         host: "localhost",
         user: "root",
-        password: "password"
+        password: ""
     },
     schema: 'basic_twitter',
     saltRounds: 10,

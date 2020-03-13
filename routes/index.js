@@ -6,6 +6,15 @@ const _ = require('lodash');
 var dbInt = require('../models/dbInterface');
 
 
+router.get("/", function (req, res) {
+  const ip =
+    req.headers["x-forwarded-for"] ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    req.connection.socket.remoteAddress;
+  res.render(global.__frontend);
+});
+
 // Register
 router.post('/register', async function (req, res, next) {
   let response = { err: null, details: 'User Registered' };
