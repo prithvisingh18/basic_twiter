@@ -75,7 +75,7 @@ describe('login', () => {
                     });
                 });
                 describe('ufollow', () => {
-                    it('it should ufollow other user', (done) => {
+                    it('it should unfollow other user', (done) => {
                         agent.post('unfollow')
                             .send({ followed: 'test2' })
                             .then(function (res) {
