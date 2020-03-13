@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "e08eaf9c-9dbb-41fb-ab56-ac755777fe81",
-		"name": "postman_test",
+		"name": "basic_twitter",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [

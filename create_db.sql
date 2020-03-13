@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `postman_test` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `postman_test`;
+CREATE DATABASE  IF NOT EXISTS `basic_twitter` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `basic_twitter`;
 -- MySQL dump 10.13  Distrib 5.7.24, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: postman_test
+-- Host: 127.0.0.1    Database: basic_twitter
 -- ------------------------------------------------------
 -- Server version	5.7.24
 
@@ -138,11 +138,11 @@ INSERT INTO `user` VALUES ('test','$2b$10$V82nt2INgkpDfRxQw5kGVO/Eo.XnjAuXdfH64Q
 UNLOCK TABLES;
 
 --
--- Dumping events for database 'postman_test'
+-- Dumping events for database 'basic_twitter'
 --
 
 --
--- Dumping routines for database 'postman_test'
+-- Dumping routines for database 'basic_twitter'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

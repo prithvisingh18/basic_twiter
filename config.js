@@ -4,7 +4,7 @@ module.exports = {
         user: "root",
         password: "password"
     },
-    schema: 'postman_test',
+    schema: 'basic_twitter',
     saltRounds: 10,
     sessionSecret: 'test',
     redisConfig: { host: 'localhost', port: 6379, ttl: 260 },
