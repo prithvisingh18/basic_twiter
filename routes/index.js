@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const uuidv1 = require('uuid/v1');
+const uuidv5 = require('uuid/v5');
+
 const _ = require('lodash');
 
 var dbInt = require('../models/dbInterface');
@@ -19,7 +21,8 @@ router.get("/", function (req, res) {
 router.post('/register', async function (req, res, next) {
   let response = { err: null, details: 'User Registered' };
   try {
-    await dbInt.registerUser(req.body.username, req.body.password);
+    let pid = uuidv5(req.body.username, global.__config["NAMESPACE"]);
+    await dbInt.registerUser(pid, req.body.username, req.body.password);
   } catch (err) {
     if (err.code === 'ER_DUP_ENTRY') {
       response.err = 'DUP_USER';
@@ -42,15 +45,44 @@ router.post('/login', async function (req, res, next) {
     response.details = 'Error While Login';
     console.log(err);
   }
-  if (login_res) {
+  if (login_res["login"]) {
     sess.session_id = uuidv1();
     sess.username = req.body.username;
+    sess.userId = login_res["data"]["pid"];
+    console.log(login_res);
     res.send(response);
   } else {
     response.err = "Login failed";
     response.details = "Wrong password or username";
     res.send(response);
   }
+});
+
+let checkLogin = async (req) => {
+  if (req.session["userId"]) {
+    try {
+      login_res = await dbInt.checkUser(req.session["userId"]);
+      if (login_res) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      return false;
+    }
+  }
+};
+
+//Check Login
+router.post('/loggedIn', async function (req, res, next) {
+  let response = { err: null, details: 'You are logged in.' };
+  let isLoggedIn = await checkLogin(req);
+  if (isLoggedIn) {
+    res.send(response);
+  } else {
+    res.send({ err: "Not logged in" });
+  }
+
 });
 
 router.get('/logout', function (req, res) {
@@ -105,9 +137,13 @@ router.post('/unfollow', async function (req, res) {
 
 router.post('/tweet/create', async function (req, res) {
   let response = { err: null, details: "Tweet Successfull" };
-  if (req.session.session_id) {
+  if (checkLogin(req)) {
     try {
-      await dbInt.createTweet(req.session.username, req.body.tweet);
+      let rid = null;
+      if (req.body.rid) {
+        rid = req.body.rid;
+      }
+      await dbInt.createTweet(req.session.username, req.session.userId, req.body.tweet, req.body.hashTags, rid);
     } catch (err) {
       response.err = "DB_ERR";
       response.details = "Tweet Failed";
@@ -214,6 +250,19 @@ router.post('/tweet/retweet', async function (req, res) {
     response.err = "SESSION_ERR";
     response.details = "Login First"
     response.data = null;
+  }
+  res.send(response);
+});
+
+router.post('/global/feed', async function (req, res) {
+  let response = { err: null, details: "Feed", data: {} };
+  try {
+    response["data"]["tweets"] = await dbInt.getGlobalFeed(req.body.lowerLimit, req.body.upperLimit);
+  } catch (err) {
+    response.err = "DB_ERR";
+    response.details = "Getting Feed Failed";
+    response.data = null;
+    console.log(err);
   }
   res.send(response);
 });

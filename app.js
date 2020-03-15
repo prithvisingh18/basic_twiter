@@ -5,6 +5,7 @@ var logger = require('morgan');
 var session = require('express-session');
 var redis = require("redis");
 var redisStore = require('connect-redis')(session);
+const _config = require('./config');
 
 var indexRouter = require('./routes/index');
 
@@ -43,6 +44,8 @@ global.con = mysql.createConnection({
     user: config.databaseConfig.user,
     password: config.databaseConfig.password
 });
+
+global.__config = _config;
 
 con.connect(function (err) {
     if (err) throw err;

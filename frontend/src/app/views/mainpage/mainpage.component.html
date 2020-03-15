@@ -1,0 +1,39 @@
+<div class="container-fluid">
+	<ng-container *ngIf="globalStorage.isLoggedIn">
+		<div class="row upper-margin justify-content-center">
+			<mat-card style="width: 80%;">
+				<mat-form-field class="full-width">
+					<mat-label>New Tweet</mat-label>
+					<textarea matInput [(ngModel)]="newTweet" placeholder="It makes me feel... "></textarea>
+				</mat-form-field>
+				<mat-form-field class="full-width">
+					<mat-label>Hashtags</mat-label>
+					<input matInput [(ngModel)]="hashTagsString" placeholder="#somthingcool#somthingmorecool">
+				</mat-form-field>
+
+				<div class="row upper-margin">
+					&nbsp;&nbsp;<button mat-raised-button (click)="publish()">Publish</button>
+				</div>
+			</mat-card>
+		</div>
+	</ng-container>
+
+	<ng-container *ngFor="let tweet of globalFeed">
+		<div class="row upper-margin justify-content-center">
+			<mat-card style="width: 80%;">
+				<mat-card-header>
+					<mat-card-title>{{tweet['username']}}</mat-card-title>
+					<mat-card-subtitle>{{tweet['hashtags']}}</mat-card-subtitle>
+				</mat-card-header>
+				<mat-card-content>
+					<p>
+						{{tweet['tweet']}}
+					</p>
+				</mat-card-content>
+				<mat-card-actions>
+					<button mat-raised-button>Reply</button>&nbsp;&nbsp;<button mat-raised-button>Load Replies</button>
+				</mat-card-actions>
+			</mat-card>
+		</div>
+	</ng-container>
+</div>
