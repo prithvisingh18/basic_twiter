@@ -38,19 +38,30 @@ app.use('/', indexRouter);
 //Db connection
 var mysql = require('mysql');
 
+let connDb = () => {
+    global.con = mysql.createConnection({
+        host: config.databaseConfig.host,
+        user: config.databaseConfig.user,
+        password: config.databaseConfig.password
+    });
 
-global.con = mysql.createConnection({
-    host: config.databaseConfig.host,
-    user: config.databaseConfig.user,
-    password: config.databaseConfig.password
-});
+    global.__config = _config;
 
-global.__config = _config;
+    con.connect(function (err) {
+        if (err) throw err;
+        console.log("DB Connected!");
+    });
 
-con.connect(function (err) {
-    if (err) throw err;
-    console.log("DB Connected!");
-});
+    con.on("error", (err) => {
+        console.log(`Err:`, err);
+        setTimeout(connDb, 2000);
+    });
+}
+
+
+
+
+
 
 global.__frontend = `${__dirname}/frontend/dist/frontend/index.html`;
 
